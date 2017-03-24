@@ -1,0 +1,13 @@
+{
+    "name": "gamepanelio/api",
+    "description": "A PHP implementation of the GamePanel.io API",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "CraftSRV Ltd.",
+            "email": "devs@craftsrv.com"
+        }
+    ],
+    "require": {}
+}
