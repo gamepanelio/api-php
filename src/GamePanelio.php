@@ -96,6 +96,19 @@ class GamePanelio
     }
 
     /**
+     * @param $username
+     * @return array
+     */
+    public function getUserByUsername($username)
+    {
+        $request = $this->createRequest()
+            ->withMethod("GET")
+            ->withUri($this->uri->withPath(self::API_BASE . '/users/username/' . urlencode($username)));
+
+        return $this->sendRequest($request);
+    }
+
+    /**
      * @param array $parameters
      * @return array
      */
