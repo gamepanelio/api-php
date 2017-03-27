@@ -76,7 +76,7 @@ class GamePanelio
         try {
             $response = $this->httpClient->sendRequest($request);
 
-            return json_decode($response->getBody());
+            return json_decode($response->getBody(), true);
         } catch (TransferException $e) {
             throw ApiCommunicationException::wrap($e);
         }
