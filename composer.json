@@ -1,0 +1,26 @@
+{
+    "name": "gamepanelio/api",
+    "description": "A PHP implementation of the GamePanel.io API",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "CraftSRV Ltd.",
+            "email": "devs@craftsrv.com"
+        }
+    ],
+    "require": {
+        "php-http/client-implementation": "^1.0",
+        "php-http/httplug": "^1.0",
+        "php-http/message-factory": "^1.0",
+        "php-http/discovery": "^1.0"
+    },
+    "require-dev": {
+        "php-http/guzzle6-adapter": "^1.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "GamePanelio\\": "src/"
+        }
+    }
+}
