@@ -78,6 +78,13 @@ class GamePanelio
         try {
             $response = $this->httpClient->sendRequest($request);
 
+            if ($response->getStatusCode() < 200 || $response->getStatusCode() >= 300) {
+                throw new ApiCommunicationException(
+                    sprintf('The request resulted in a non-success HTTP code %s; ', $response->getStatusCode()) .
+                    $response->getBody()->getContents()
+                );
+            }
+
             return json_decode($response->getBody(), true);
         } catch (TransferException $e) {
             throw ApiCommunicationException::wrap($e);
@@ -91,6 +98,17 @@ class GamePanelio
     private function createStreamFor($body)
     {
         return StreamFactoryDiscovery::find()->createStream($body);
+    }
+
+    /**
+     * @param RequestInterface $request
+     * @param mixed $body
+     * @return RequestInterface
+     */
+    private function withJsonBody(RequestInterface $request, $body)
+    {
+        return $request->withBody($this->createStreamFor(json_encode($body)))
+            ->withHeader("Content-Type", "application/json");
     }
 
     /**
@@ -127,8 +145,9 @@ class GamePanelio
     {
         $request = $this->createRequest()
             ->withMethod("POST")
-            ->withUri($this->uri->withPath(self::API_BASE . '/users'))
-            ->withBody($this->createStreamFor(json_encode($parameters)));
+            ->withUri($this->uri->withPath(self::API_BASE . '/users'));
+
+        $request = $this->withJsonBody($request, $parameters);
 
         return $this->sendRequest($request);
     }
@@ -143,8 +162,9 @@ class GamePanelio
     {
         $request = $this->createRequest()
             ->withMethod($replaceAll ? "PUT" : "PATCH")
-            ->withUri($this->uri->withPath(self::API_BASE . '/users/' . urlencode($id)))
-            ->withBody($this->createStreamFor(json_encode($parameters)));
+            ->withUri($this->uri->withPath(self::API_BASE . '/users/' . urlencode($id)));
+
+        $request = $this->withJsonBody($request, $parameters);
 
         return $this->sendRequest($request);
     }
@@ -183,8 +203,9 @@ class GamePanelio
     {
         $request = $this->createRequest()
             ->withMethod("POST")
-            ->withUri($this->uri->withPath(self::API_BASE . '/servers'))
-            ->withBody($this->createStreamFor(json_encode($parameters)));
+            ->withUri($this->uri->withPath(self::API_BASE . '/servers'));
+
+        $request = $this->withJsonBody($request, $parameters);
 
         return $this->sendRequest($request);
     }
@@ -199,8 +220,9 @@ class GamePanelio
     {
         $request = $this->createRequest()
             ->withMethod($replaceAll ? "PUT" : "PATCH")
-            ->withUri($this->uri->withPath(self::API_BASE . '/servers/' . urlencode($id)))
-            ->withBody($this->createStreamFor(json_encode($parameters)));
+            ->withUri($this->uri->withPath(self::API_BASE . '/servers/' . urlencode($id)));
+
+        $request = $this->withJsonBody($request, $parameters);
 
         return $this->sendRequest($request);
     }
