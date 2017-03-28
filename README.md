@@ -11,7 +11,7 @@ This library uses the [HTTPlug](https://github.com/php-http/httplug) HTTP client
 For a quick and easy way to use this library in your project, via composer, run the following:
 
 ```bash
-  composer require php-http/guzzle6-adapter gamepanelio/api
+  composer require php-http/curl-client guzzlehttp/psr7 php-http/message gamepanelio/api
 ```
 
 There is also [lots of different libraries](https://packagist.org/providers/php-http/client-implementation)

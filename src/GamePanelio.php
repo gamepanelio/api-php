@@ -8,8 +8,10 @@ use Http\Client\Exception\TransferException;
 use Http\Client\HttpClient;
 use Http\Discovery\HttpClientDiscovery;
 use Http\Discovery\MessageFactoryDiscovery;
+use Http\Discovery\StreamFactoryDiscovery;
 use Http\Discovery\UriFactoryDiscovery;
 use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriInterface;
 
 class GamePanelio
@@ -83,6 +85,15 @@ class GamePanelio
     }
 
     /**
+     * @param $body
+     * @return StreamInterface
+     */
+    private function createStreamFor($body)
+    {
+        return StreamFactoryDiscovery::find()->createStream($body);
+    }
+
+    /**
      * @param int $id
      * @return array
      */
@@ -117,7 +128,7 @@ class GamePanelio
         $request = $this->createRequest()
             ->withMethod("POST")
             ->withUri($this->uri->withPath(self::API_BASE . '/users'))
-            ->withBody(json_encode($parameters));
+            ->withBody($this->createStreamFor(json_encode($parameters)));
 
         return $this->sendRequest($request);
     }
@@ -133,7 +144,7 @@ class GamePanelio
         $request = $this->createRequest()
             ->withMethod($replaceAll ? "PUT" : "PATCH")
             ->withUri($this->uri->withPath(self::API_BASE . '/users/' . urlencode($id)))
-            ->withBody(json_encode($parameters));
+            ->withBody($this->createStreamFor(json_encode($parameters)));
 
         return $this->sendRequest($request);
     }
@@ -173,7 +184,7 @@ class GamePanelio
         $request = $this->createRequest()
             ->withMethod("POST")
             ->withUri($this->uri->withPath(self::API_BASE . '/servers'))
-            ->withBody(json_encode($parameters));
+            ->withBody($this->createStreamFor(json_encode($parameters)));
 
         return $this->sendRequest($request);
     }
@@ -189,7 +200,7 @@ class GamePanelio
         $request = $this->createRequest()
             ->withMethod($replaceAll ? "PUT" : "PATCH")
             ->withUri($this->uri->withPath(self::API_BASE . '/servers/' . urlencode($id)))
-            ->withBody(json_encode($parameters));
+            ->withBody($this->createStreamFor(json_encode($parameters)));
 
         return $this->sendRequest($request);
     }
