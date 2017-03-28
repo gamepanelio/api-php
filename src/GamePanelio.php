@@ -94,6 +94,17 @@ class GamePanelio
     }
 
     /**
+     * @param RequestInterface $request
+     * @param mixed $body
+     * @return RequestInterface
+     */
+    private function withJsonBody(RequestInterface $request, $body)
+    {
+        return $request->withBody($this->createStreamFor(json_encode($body)))
+            ->withHeader("Content-Type", "application/json");
+    }
+
+    /**
      * @param int $id
      * @return array
      */
@@ -127,8 +138,9 @@ class GamePanelio
     {
         $request = $this->createRequest()
             ->withMethod("POST")
-            ->withUri($this->uri->withPath(self::API_BASE . '/users'))
-            ->withBody($this->createStreamFor(json_encode($parameters)));
+            ->withUri($this->uri->withPath(self::API_BASE . '/users'));
+
+        $request = $this->withJsonBody($request, $parameters);
 
         return $this->sendRequest($request);
     }
@@ -143,8 +155,9 @@ class GamePanelio
     {
         $request = $this->createRequest()
             ->withMethod($replaceAll ? "PUT" : "PATCH")
-            ->withUri($this->uri->withPath(self::API_BASE . '/users/' . urlencode($id)))
-            ->withBody($this->createStreamFor(json_encode($parameters)));
+            ->withUri($this->uri->withPath(self::API_BASE . '/users/' . urlencode($id)));
+
+        $request = $this->withJsonBody($request, $parameters);
 
         return $this->sendRequest($request);
     }
@@ -183,8 +196,9 @@ class GamePanelio
     {
         $request = $this->createRequest()
             ->withMethod("POST")
-            ->withUri($this->uri->withPath(self::API_BASE . '/servers'))
-            ->withBody($this->createStreamFor(json_encode($parameters)));
+            ->withUri($this->uri->withPath(self::API_BASE . '/servers'));
+
+        $request = $this->withJsonBody($request, $parameters);
 
         return $this->sendRequest($request);
     }
@@ -199,8 +213,9 @@ class GamePanelio
     {
         $request = $this->createRequest()
             ->withMethod($replaceAll ? "PUT" : "PATCH")
-            ->withUri($this->uri->withPath(self::API_BASE . '/servers/' . urlencode($id)))
-            ->withBody($this->createStreamFor(json_encode($parameters)));
+            ->withUri($this->uri->withPath(self::API_BASE . '/servers/' . urlencode($id)));
+
+        $request = $this->withJsonBody($request, $parameters);
 
         return $this->sendRequest($request);
     }
