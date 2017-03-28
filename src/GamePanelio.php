@@ -78,6 +78,13 @@ class GamePanelio
         try {
             $response = $this->httpClient->sendRequest($request);
 
+            if ($response->getStatusCode() < 200 || $response->getStatusCode() >= 300) {
+                throw new ApiCommunicationException(
+                    sprintf('The request resulted in a non-success HTTP code %s; ', $response->getStatusCode()) .
+                    $response->getBody()->getContents()
+                );
+            }
+
             return json_decode($response->getBody(), true);
         } catch (TransferException $e) {
             throw ApiCommunicationException::wrap($e);
